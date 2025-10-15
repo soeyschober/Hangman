@@ -51,8 +51,16 @@ public class HangmanUI extends JFrame {
         wordTp = new JTextPane();
         wordTp.setFont(new Font("Arial Monospaced", Font.BOLD, 24));
         wordTp.setEditable(false);
-        add(wordTp, BorderLayout.NORTH);
+        add(wordTp, BorderLayout.CENTER);
         centerText(wordTp);
+
+        imgPl = new JPanel(new BorderLayout());
+        imgLbl = new JLabel("", SwingConstants.CENTER);
+        imgPl.add(imgLbl, BorderLayout.CENTER);
+
+        add(imgPl, BorderLayout.NORTH);
+
+        showHangman(0);
 
         if (keyboardPl == null) keyboardPl = new JPanel();
 
@@ -76,7 +84,7 @@ public class HangmanUI extends JFrame {
             }
         }
 
-        add(keyboardPl, BorderLayout.CENTER);
+        add(keyboardPl, BorderLayout.SOUTH);
         initGame();
     }
 
@@ -86,6 +94,7 @@ public class HangmanUI extends JFrame {
         for (int i = 0; i < displayWord.length; i++) displayWord[i] = '_';
         updateText();
         errorCount = 0;
+        showHangman(0);
     }
 
     private void checkLetter(char letter, JButton btn) {
@@ -101,6 +110,7 @@ public class HangmanUI extends JFrame {
 
         if (!found) {
             errorCount++;
+            showHangman(errorCount);
             if (errorCount >= MAX_ERRORS) {
                 JOptionPane.showMessageDialog(this, "Game Over! Das Wort war: " + selectedWord);
                 resetButtons();
@@ -137,4 +147,23 @@ public class HangmanUI extends JFrame {
         StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
         doc.setParagraphAttributes(0, doc.getLength(), center, false);
     }
+
+    private void showHangman(int errors) {
+        int idx = Math.max(0, Math.min(errors, MAX_ERRORS));
+        String cpPath = "/img/hangman_" + idx + ".png";
+        java.net.URL url = getClass().getResource(cpPath);
+
+        ImageIcon icon;
+        if (url != null) {
+            icon = new ImageIcon(url);
+        } else {
+            String fsPath = "img/hangman_" + idx + ".png";
+            icon = new ImageIcon(fsPath);
+        }
+
+        imgLbl.setIcon(icon);
+        imgLbl.revalidate();
+        imgLbl.repaint();
+    }
+
 }
