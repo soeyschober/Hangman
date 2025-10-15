@@ -41,6 +41,8 @@ public class HangmanUI extends JFrame {
     private final String[] words = {"JAVA", "CODE", "PROGRAMM", "ENTWICKLER"};
     private String selectedWord;
     private char[] displayWord;
+    private int errorCount = 0;
+    private static final int MAX_ERRORS = 10;
 
     public HangmanUI() {
         setTitle("Hangman");
@@ -83,6 +85,7 @@ public class HangmanUI extends JFrame {
         displayWord = new char[selectedWord.length()];
         for (int i = 0; i < displayWord.length; i++) displayWord[i] = '_';
         updateText();
+        errorCount = 0;
     }
 
     private void checkLetter(char letter, JButton btn) {
@@ -96,7 +99,15 @@ public class HangmanUI extends JFrame {
         }
         updateText();
 
-        if (!found) btn.setBackground(Color.RED);
+        if (!found) {
+            errorCount++;
+            if (errorCount >= MAX_ERRORS) {
+                JOptionPane.showMessageDialog(this, "Game Over! Das Wort war: " + selectedWord);
+                resetButtons();
+                initGame();
+                return;
+            }
+        }
         if (new String(displayWord).equals(selectedWord)) {
             JOptionPane.showMessageDialog(this, "Gewonnen! Das Wort war: " + selectedWord);
             resetButtons();
