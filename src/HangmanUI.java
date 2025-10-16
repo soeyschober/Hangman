@@ -111,19 +111,24 @@ public class HangmanUI extends JFrame {
 
     private void wireListeners(){
 
-        einstellungenBtn.addActionListener(e -> {
-
-        });
+        einstellungenBtn.addActionListener(e -> openSettingsDialog());
 
         neuesSpielBtn.addActionListener(e -> {
             resetButtons();
             initGame();
         });
 
-        exitBtn.addActionListener(e -> {
-            System.exit(0);
-        });
+        exitBtn.addActionListener(e -> System.exit(0));
 
+    }
+
+    private void openSettingsDialog() {
+        settingsForm form = new settingsForm();
+        JDialog dlg = new JDialog(this, "Einstellungen", true); // modal
+        dlg.setContentPane(form.getRoot());                     // Panel aus settingsForm
+        dlg.pack();
+        dlg.setLocationRelativeTo(this);
+        dlg.setVisible(true);
     }
 
     private void initGame() {

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="settingsForm">
+  <grid id="27dc6" binding="settingsOverview" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+    <margin top="10" left="10" bottom="10" right="10"/>
+    <constraints>
+      <xy x="20" y="20" width="336" height="325"/>
+    </constraints>
+    <properties>
+      <background color="-1644826"/>
+    </properties>
+    <border type="none"/>
+    <children>
+      <grid id="7683" layout-manager="GridLayoutManager" row-count="9" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+        <margin top="5" left="5" bottom="5" right="5"/>
+        <constraints>
+          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <background color="-1"/>
+        </properties>
+        <border type="none" title="Einstellungen"/>
+        <children>
+          <component id="209de" class="javax.swing.JRadioButton" binding="fehlerBtn">
+            <constraints>
+              <grid row="0" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <background color="-1"/>
+              <text value="Fehleranzeige"/>
+            </properties>
+          </component>
+          <component id="20126" class="javax.swing.JSlider" binding="fehlerSlider">
+            <constraints>
+              <grid row="6" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <background color="-1"/>
+              <maximum value="2"/>
+              <minimum value="0"/>
+              <paintLabels value="false"/>
+              <paintTicks value="true"/>
+              <paintTrack value="true"/>
+              <snapToTicks value="false"/>
+              <value value="1"/>
+              <valueIsAdjusting value="false"/>
+            </properties>
+          </component>
+          <component id="baa24" class="javax.swing.JSlider" binding="laengeSlider">
+            <constraints>
+              <grid row="3" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <background color="-1"/>
+              <maximum value="2"/>
+              <minimum value="0"/>
+              <paintTicks value="true"/>
+              <snapToTicks value="false"/>
+              <toolTipText value=""/>
+              <value value="1"/>
+              <valueIsAdjusting value="false"/>
+            </properties>
+          </component>
+          <component id="7019a" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="2" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="Wörterlänge"/>
+            </properties>
+          </component>
+          <component id="1d835" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="5" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="Erlaubte Fehler"/>
+            </properties>
+          </component>
+          <vspacer id="7d4d7">
+            <constraints>
+              <grid row="1" column="0" row-span="1" col-span="2" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+            </constraints>
+          </vspacer>
+          <vspacer id="cdae7">
+            <constraints>
+              <grid row="4" column="0" row-span="1" col-span="2" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+            </constraints>
+          </vspacer>
+          <component id="2fcad" class="javax.swing.JButton" binding="okBtn">
+            <constraints>
+              <grid row="8" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="OK"/>
+            </properties>
+          </component>
+          <component id="cc3c2" class="javax.swing.JButton" binding="exitBtn">
+            <constraints>
+              <grid row="8" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="Abbrechen"/>
+            </properties>
+          </component>
+          <vspacer id="8e777">
+            <constraints>
+              <grid row="7" column="0" row-span="1" col-span="2" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+            </constraints>
+          </vspacer>
+        </children>
+      </grid>
+    </children>
+  </grid>
+</form>
