@@ -37,6 +37,12 @@ public class HangmanUI extends JFrame {
     private JLabel imgLbl;
     private JTextPane wordTp;
     private JTextPane fehlerTp;
+    private JButton exitBtn;
+    private JButton neuesSpielBtn;
+    private JButton einstellungenBtn;
+    private JToolBar toolBar;
+    private JPanel centerPnl;
+    private JPanel headerPnl;
 
     private final String[] words = {"JAVA", "CODE", "PROGRAMM", "ENTWICKLER"};
     private String selectedWord;
@@ -47,20 +53,36 @@ public class HangmanUI extends JFrame {
     public HangmanUI() {
         setTitle("Hangman");
         setLayout(new BorderLayout());
+        addComponents();
+        wireListeners();
+        initGame();
+    }
+
+    public void addComponents(){
+        headerPnl = new JPanel();
+        toolBar = new JToolBar();
+        headerPnl.add(toolBar);
+        toolBar.setFloatable(false);
+        toolBar.add(einstellungenBtn);
+        toolBar.add(neuesSpielBtn);
+        toolBar.add(Box.createHorizontalGlue());
+        toolBar.add(exitBtn);
+        add(toolBar, BorderLayout.NORTH);
 
         wordTp = new JTextPane();
         wordTp.setFont(new Font("Arial Monospaced", Font.BOLD, 24));
         wordTp.setEditable(false);
-        add(wordTp, BorderLayout.CENTER);
         centerText(wordTp);
 
         imgPl = new JPanel(new BorderLayout());
         imgLbl = new JLabel("", SwingConstants.CENTER);
         imgPl.add(imgLbl, BorderLayout.CENTER);
-
-        add(imgPl, BorderLayout.NORTH);
-
         showHangman(0);
+
+        centerPnl = new JPanel(new BorderLayout());
+        centerPnl.add(imgPl, BorderLayout.NORTH);     // image at top of the center area
+        centerPnl.add(wordTp, BorderLayout.CENTER);   // your existing word text pane
+        add(centerPnl, BorderLayout.CENTER);
 
         if (keyboardPl == null) keyboardPl = new JPanel();
 
@@ -85,7 +107,23 @@ public class HangmanUI extends JFrame {
         }
 
         add(keyboardPl, BorderLayout.SOUTH);
-        initGame();
+    }
+
+    private void wireListeners(){
+
+        einstellungenBtn.addActionListener(e -> {
+
+        });
+
+        neuesSpielBtn.addActionListener(e -> {
+            resetButtons();
+            initGame();
+        });
+
+        exitBtn.addActionListener(e -> {
+            System.exit(0);
+        });
+
     }
 
     private void initGame() {
@@ -165,5 +203,4 @@ public class HangmanUI extends JFrame {
         imgLbl.revalidate();
         imgLbl.repaint();
     }
-
 }
