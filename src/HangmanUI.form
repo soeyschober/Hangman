@@ -334,22 +334,13 @@
                   <text value="Einstellungen"/>
                 </properties>
               </component>
+              <hspacer id="3c86">
+                <constraints/>
+              </hspacer>
               <component id="e9344" class="javax.swing.JButton" binding="neuesSpielBtn">
                 <constraints/>
                 <properties>
                   <text value="neues Spiel"/>
-                </properties>
-              </component>
-              <hspacer id="3c86">
-                <constraints/>
-              </hspacer>
-              <component id="8cfb8" class="javax.swing.JButton" binding="exitBtn">
-                <constraints/>
-                <properties>
-                  <background color="-8047824"/>
-                  <foreground color="-1"/>
-                  <horizontalTextPosition value="0"/>
-                  <text value="Exit"/>
                 </properties>
               </component>
             </children>

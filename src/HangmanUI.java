@@ -5,50 +5,38 @@ import java.util.Random;
 import javax.swing.text.*;
 
 public class HangmanUI extends JFrame {
-    private JButton aBtn;
-    private JButton bBtn;
-    private JButton cBtn;
-    private JButton dBtn;
-    private JButton eBtn;
-    private JButton fBtn;
-    private JButton gBtn;
-    private JButton hBtn;
-    private JButton iBtn;
-    private JButton jBtn;
-    private JButton kBtn;
-    private JButton lBtn;
-    private JButton mBtn;
-    private JButton nBtn;
-    private JButton oBtn;
-    private JButton pBtn;
-    private JButton qBtn;
-    private JButton rBtn;
-    private JButton sBtn;
-    private JButton tBtn;
-    private JButton vBtn;
-    private JButton uBtn;
-    private JButton wBtn;
-    private JButton xBtn;
-    private JButton yBtn;
-    private JButton zBtn;
+    private JButton aBtn, bBtn, cBtn, dBtn, eBtn, fBtn, gBtn, hBtn, iBtn, jBtn, kBtn, lBtn, mBtn, nBtn, oBtn, pBtn, qBtn, rBtn, sBtn, tBtn, uBtn, vBtn, wBtn, xBtn, yBtn, zBtn;
     private JPanel imgPl;
     private JPanel keyboardPl;
     private JPanel wordPl;
     private JLabel imgLbl;
     private JTextPane wordTp;
     private JTextPane fehlerTp;
-    private JButton exitBtn;
     private JButton neuesSpielBtn;
     private JButton einstellungenBtn;
     private JToolBar toolBar;
     private JPanel centerPnl;
     private JPanel headerPnl;
 
-    private final String[] words = {"JAVA", "CODE", "PROGRAMM", "ENTWICKLER"};
+    private final String[] shortWords = {
+            "JAVA", "CODE", "BYTE", "GIT", "TEST", "LOOP", "TASK", "HASH", "NODE", "PLAN", "API", "PIPE", "JSON", "ENUM", "LOG"
+    };
+
+    private final String[] defaultWords = {
+            "KLASSE", "OBJECT", "THREAD", "MODULE", "LAMBDA", "SCRIPT", "BACKEND", "FRONTEND", "SERVICE", "BRANCH", "REQUEST", "RESPONSE", "ENTITIES", "PATTERN", "LIBRARY", "CLEANUP", "FEATURE", "HANDLER", "FACTORY", "PACKAGE"
+    };
+
+    private final String[] longWords = {
+            "ENTWICKLER", "PROGRAMMIERER", "DATENBANKEN", "SCHNITTSTELLEN", "SERIALIZING", "KONFIGURATION", "MULTITHREADING", "AUTHENTICATION", "AUTORISIERUNG", "CONTINUOUS", "DESERIALIZING", "INFRASTRUKTUR", "ABHAENGIGKEITEN", "ANWENDUNGSDIENST", "VERIFICATION"
+    };
     private String selectedWord;
     private char[] displayWord;
     private int errorCount = 0;
-    private static final int MAX_ERRORS = 10;
+
+    private int maxErrors = 6;
+    private int minWordLength = 3;
+
+    settingsForm form = new settingsForm();
 
     public HangmanUI() {
         setTitle("Hangman");
@@ -64,15 +52,16 @@ public class HangmanUI extends JFrame {
         headerPnl.add(toolBar);
         toolBar.setFloatable(false);
         toolBar.add(einstellungenBtn);
-        toolBar.add(neuesSpielBtn);
         toolBar.add(Box.createHorizontalGlue());
-        toolBar.add(exitBtn);
+        toolBar.add(neuesSpielBtn);
         add(toolBar, BorderLayout.NORTH);
 
         wordTp = new JTextPane();
         wordTp.setFont(new Font("Arial Monospaced", Font.BOLD, 24));
-        wordTp.setEditable(false);
         centerText(wordTp);
+
+        fehlerTp = new JTextPane();
+        fehlerTp.setFont(new Font("Arial Monospaced", Font.BOLD, 12));
 
         imgPl = new JPanel(new BorderLayout());
         imgLbl = new JLabel("", SwingConstants.CENTER);
@@ -80,8 +69,9 @@ public class HangmanUI extends JFrame {
         showHangman(0);
 
         centerPnl = new JPanel(new BorderLayout());
-        centerPnl.add(imgPl, BorderLayout.NORTH);     // image at top of the center area
-        centerPnl.add(wordTp, BorderLayout.CENTER);   // your existing word text pane
+        centerPnl.add(imgPl, BorderLayout.NORTH);
+        centerPnl.add(wordTp, BorderLayout.CENTER);
+        centerPnl.add(fehlerTp, BorderLayout.SOUTH);
         add(centerPnl, BorderLayout.CENTER);
 
         if (keyboardPl == null) keyboardPl = new JPanel();
@@ -118,26 +108,50 @@ public class HangmanUI extends JFrame {
             initGame();
         });
 
-        exitBtn.addActionListener(e -> System.exit(0));
-
     }
 
     private void openSettingsDialog() {
-        settingsForm form = new settingsForm();
-        JDialog dlg = new JDialog(this, "Einstellungen", true); // modal
-        dlg.setContentPane(form.getRoot());                     // Panel aus settingsForm
+        JDialog dlg = new JDialog(this, "Einstellungen", true);
+        dlg.setContentPane(form.getRoot());
         dlg.pack();
         dlg.setLocationRelativeTo(this);
         dlg.setVisible(true);
+
+        try {
+            this.maxErrors = form.getSelectedMaxErrors();
+            this.minWordLength = form.getSelectedMinLength();
+        } catch (Throwable ignored) {
+        }
+        resetButtons();
+        initGame();
     }
 
     private void initGame() {
-        selectedWord = words[new Random().nextInt(words.length)];
+        String[] poolArr = getActiveWordPool();
+
+        if (poolArr == null || poolArr.length == 0) {
+            poolArr = defaultWords;
+        }
+
+        // Random pick
+        String pick = poolArr[new Random().nextInt(poolArr.length)];
+        selectedWord = pick.toUpperCase();
+
         displayWord = new char[selectedWord.length()];
         for (int i = 0; i < displayWord.length; i++) displayWord[i] = '_';
+
         updateText();
         errorCount = 0;
         showHangman(0);
+    }
+
+    private String[] getActiveWordPool() {
+        switch (form.getSelectedMinLength()) {
+            case 2: return longWords;
+            case 1: return defaultWords;
+            case 0: return shortWords;
+            default: return defaultWords;
+        }
     }
 
     private void checkLetter(char letter, JButton btn) {
@@ -154,7 +168,7 @@ public class HangmanUI extends JFrame {
         if (!found) {
             errorCount++;
             showHangman(errorCount);
-            if (errorCount >= MAX_ERRORS) {
+            if (errorCount >= maxErrors) {
                 JOptionPane.showMessageDialog(this, "Game Over! Das Wort war: " + selectedWord);
                 resetButtons();
                 initGame();
@@ -182,6 +196,13 @@ public class HangmanUI extends JFrame {
         for (char c : displayWord) sb.append(c).append(' ');
         wordTp.setText(sb.toString());
         centerText(wordTp);
+
+        if (form.isShowErrors()) {
+            fehlerTp.setText("Fehler: " + errorCount + " / " + maxErrors);
+            centerText(fehlerTp);
+        } else {
+            fehlerTp.setText("");
+        }
     }
 
     private static void centerText(JTextPane pane) {
@@ -192,15 +213,29 @@ public class HangmanUI extends JFrame {
     }
 
     private void showHangman(int errors) {
-        int idx = Math.max(0, Math.min(errors, MAX_ERRORS));
-        String cpPath = "/img/hangman_" + idx + ".png";
+        String prefix;
+        int seriesMaxIndex;
+        if (maxErrors <= 3) {
+            prefix = "hangman3_";
+            seriesMaxIndex = 3;
+        } else if (maxErrors <= 6) {
+            prefix = "hangman6_";
+            seriesMaxIndex = 6;
+        } else {
+            prefix = "hangman_";
+            seriesMaxIndex = 10;
+        }
+
+        int idx = Math.max(0, Math.min(errors, seriesMaxIndex));
+        String cpPath = "/img/" + prefix + idx + ".png";
+
         java.net.URL url = getClass().getResource(cpPath);
 
         ImageIcon icon;
         if (url != null) {
             icon = new ImageIcon(url);
         } else {
-            String fsPath = "img/hangman_" + idx + ".png";
+            String fsPath = "img/" + cpPath.substring("/img/".length());
             icon = new ImageIcon(fsPath);
         }
 
