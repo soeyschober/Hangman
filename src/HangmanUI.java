@@ -1,4 +1,5 @@
 import javax.swing.*;
+import javax.swing.border.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Random;
@@ -38,6 +39,10 @@ public class HangmanUI extends JFrame {
 
     settingsForm form = new settingsForm();
 
+    /**
+     * {@summary Initialisiert das UI-Fenster und startet ein neues Spiel.}
+     * Setzt Titel und Layout, fügt Komponenten ein, verdrahtet Events und triggert initGame().
+     */
     public HangmanUI() {
         setTitle("Hangman");
         setLayout(new BorderLayout());
@@ -46,6 +51,11 @@ public class HangmanUI extends JFrame {
         initGame();
     }
 
+    /**
+     * {@summary Erzeugt und arrangiert alle UI-Komponenten.}
+     * Baut Toolbar, Bildbereich, Wortanzeige, Fehleranzeige sowie das On-Screen-Keyboard auf
+     * und fügt alles ins BorderLayout ein. Hängt Letter-Button-Handler an.
+     */
     public void addComponents(){
         headerPnl = new JPanel();
         toolBar = new JToolBar();
@@ -99,6 +109,10 @@ public class HangmanUI extends JFrame {
         add(keyboardPl, BorderLayout.SOUTH);
     }
 
+    /**
+     * {@summary Verdrahtet Event-Listener für Toolbar-Aktionen.}
+     * Öffnet den Einstellungsdialog und startet per Button ein neues Spiel inklusive Reset der Buttons.
+     */
     private void wireListeners(){
 
         einstellungenBtn.addActionListener(e -> openSettingsDialog());
@@ -110,6 +124,11 @@ public class HangmanUI extends JFrame {
 
     }
 
+    /**
+     * {@summary Öffnet den modalen Einstellungsdialog und übernimmt Werte.}
+     * Zeigt settingsForm, liest maxErrors und minWordLength aus, fängt Fehler ab,
+     * setzt UI zurück und startet ein neues Spiel.
+     */
     private void openSettingsDialog() {
         JDialog dlg = new JDialog(this, "Einstellungen", true);
         dlg.setContentPane(form.getRoot());
@@ -126,6 +145,11 @@ public class HangmanUI extends JFrame {
         initGame();
     }
 
+    /**
+     * {@summary Startet bzw. setzt eine Spielrunde zurück.}
+     * Wählt anhand der Einstellungen einen Wortpool, zieht ein Zufallswort,
+     * initialisiert displayWord, aktualisiert die Textanzeige und setzt Fehlerstand und Grafik.
+     */
     private void initGame() {
         String[] poolArr = getActiveWordPool();
 
@@ -145,6 +169,10 @@ public class HangmanUI extends JFrame {
         showHangman(0);
     }
 
+    /**
+     * {@summary Liefert den aktiven Wortpool entsprechend der Mindestlänge.}
+     * Mapped die Auswahl der settingsForm auf shortWords, defaultWords oder longWords.
+     */
     private String[] getActiveWordPool() {
         switch (form.getSelectedMinLength()) {
             case 2: return longWords;
@@ -154,6 +182,11 @@ public class HangmanUI extends JFrame {
         }
     }
 
+    /**
+     * {@summary Prüft einen geratenen Buchstaben und aktualisiert Spielzustand.}
+     * Deaktiviert den Button, deckt Treffer im displayWord auf oder erhöht Fehler,
+     * prüft Sieg/Niederlage, startet ggf. neue Runde und aktualisiert Anzeige.
+     */
     private void checkLetter(char letter, JButton btn) {
         btn.setEnabled(false);
         boolean found = false;
@@ -163,7 +196,6 @@ public class HangmanUI extends JFrame {
                 found = true;
             }
         }
-        updateText();
 
         if (!found) {
             errorCount++;
@@ -180,8 +212,14 @@ public class HangmanUI extends JFrame {
             resetButtons();
             initGame();
         }
+        
+        updateText();
     }
 
+    /**
+     * {@summary Setzt das On-Screen-Keyboard zurück.}
+     * Aktiviert alle Buchstabenbuttons und stellt die Standardfarbe wieder her.
+     */
     private void resetButtons() {
         for (Component c : keyboardPl.getComponents()) {
             if (c instanceof JButton) {
@@ -191,6 +229,10 @@ public class HangmanUI extends JFrame {
         }
     }
 
+    /**
+     * {@summary Aktualisiert Wortanzeige und Fehlerzähler im UI.}
+     * Formatiert displayWord mit Abständen, zentriert Text und zeigt Fehler nur bei aktivierter Option.
+     */
     private void updateText() {
         StringBuilder sb = new StringBuilder();
         for (char c : displayWord) sb.append(c).append(' ');
@@ -205,6 +247,10 @@ public class HangmanUI extends JFrame {
         }
     }
 
+    /**
+     * {@summary Zentriert den Text eines JTextPane.}
+     * Setzt Absatz-Attribute des Dokuments auf zentrierte Ausrichtung.
+     */
     private static void centerText(JTextPane pane) {
         StyledDocument doc = pane.getStyledDocument();
         SimpleAttributeSet center = new SimpleAttributeSet();
@@ -212,6 +258,11 @@ public class HangmanUI extends JFrame {
         doc.setParagraphAttributes(0, doc.getLength(), center, false);
     }
 
+    /**
+     * {@summary Aktualisiert die Galgenmännchen-Grafik je nach Fehlerzahl.}
+     * Wählt die passende Bildserie anhand maxErrors, begrenzt den Index,
+     * lädt das Bild aus dem Klassenpfad oder Dateisystem und setzt es im Label.
+     */
     private void showHangman(int errors) {
         String prefix;
         int seriesMaxIndex;

@@ -1,6 +1,11 @@
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * {@summary Einstellungsdialog für das Hangman-Spiel.}
+ * Kapselt Auswahl der maximalen Fehler, der Mindestwortlänge und die Option zur Fehleranzeige.
+ * Bestätigt Werte über OK, verwirft/verlässt über Exit.
+ */
 public class settingsForm {
     private JPanel settingsOverview;
     private JRadioButton fehlerRBtn;
@@ -17,6 +22,11 @@ public class settingsForm {
     private int selectedMinLength = LENGTH_MIN_PRESETS[1];
     private boolean showErrors = false;
 
+    /**
+     * {@summary Initialisiert den Dialog und verdrahtet Button-Events.}
+     * Überträgt Slider- und Radio-Button-Werte auf interne Felder bei OK und schließt das Fenster.
+     * Exit schließt ohne Änderungen.
+     */
     public settingsForm() {
 
         okBtn.addActionListener(e -> {
@@ -35,6 +45,7 @@ public class settingsForm {
         });
     }
 
+    //region Getter
     public JPanel getRoot() {
         return settingsOverview;
     }
@@ -50,12 +61,5 @@ public class settingsForm {
     public boolean isShowErrors() {
         return showErrors;
     }
-
-    public int getLaengeSlider() {
-        return laengeSlider.getValue();
-    }
-
-    public int getFehlerSlider() {
-        return fehlerSlider.getValue();
-    }
+    //endregion
 }
